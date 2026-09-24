@@ -311,7 +311,7 @@ struct EndToEndTests {
         #expect(clientReceivedControlFrames == [.settings(serverSettings)])
 
         // Tear down
-        try await serverChannel.pipeline.handler(type: QUICHandler.self).flatMap {
+        try await serverChannel.pipeline.handler(type: QUICHandler<QUICStreamChannels>.self).flatMap {
             $0.shutdownGracefully(deadline: .now())
         }.get()
         try await clientConnectionChannel.closeFuture.get()
@@ -536,7 +536,7 @@ struct EndToEndTests {
         )
 
         // Tear down
-        try await serverChannel.pipeline.handler(type: QUICHandler.self).flatMap {
+        try await serverChannel.pipeline.handler(type: QUICHandler<QUICStreamChannels>.self).flatMap {
             $0.shutdownGracefully(deadline: .now())
         }.get()
         try await clientConnectionChannel.closeFuture.get()
@@ -642,7 +642,7 @@ struct EndToEndTests {
         #expect(clientReceivedFrames == [.headers([HTTPField(name: .status, value: "200")])])
 
         // Tear down
-        try await serverChannel.pipeline.handler(type: QUICHandler.self).flatMap {
+        try await serverChannel.pipeline.handler(type: QUICHandler<QUICStreamChannels>.self).flatMap {
             $0.shutdownGracefully(deadline: .now())
         }.get()
         try await clientConnectionChannel.closeFuture.get()
@@ -688,7 +688,7 @@ struct EndToEndTests {
         // Our outbound handlers will prevent writing an invalid frame, so we need to skip past the stream handler
         _ = requestStreamChannel.eventLoop.submit {
             let streamHandler = try requestStreamChannel.pipeline.syncOperations.handler(
-                type: HTTP3StreamHandler<HTTP3ConnectionCoordinator<NIOQUIC.QUICStreamCreator>>.self
+                type: HTTP3ConnectionCoordinator<NIOQUIC.QUICStreamCreator>.StreamHandler.self
             )
             let streamHandlerContext = try requestStreamChannel.pipeline.syncOperations.context(handler: streamHandler)
             var buffer = ByteBuffer()
@@ -921,7 +921,7 @@ struct EndToEndTests {
         // Our outbound handlers will prevent writing an invalid frame, so we need to skip past the stream handler.
         _ = requestStreamChannel.eventLoop.submit {
             let streamHandler = try requestStreamChannel.pipeline.syncOperations.handler(
-                type: HTTP3StreamHandler<HTTP3ConnectionCoordinator<NIOQUIC.QUICStreamCreator>>.self
+                type: HTTP3ConnectionCoordinator<NIOQUIC.QUICStreamCreator>.StreamHandler.self
             )
             let streamHandlerContext = try requestStreamChannel.pipeline.syncOperations.context(handler: streamHandler)
             var buffer = ByteBuffer()
@@ -1893,6 +1893,7 @@ struct EndToEndTests {
     }
 }
 
+@available(anyAppleOS 26, *)
 extension Channel {
     /// Call this on a HTTP3 connection channel to make an outbound request stream.
     /// - Returns: The request stream channel.

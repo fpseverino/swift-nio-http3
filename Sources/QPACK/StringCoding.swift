@@ -73,6 +73,7 @@ extension ByteBuffer {
     /// - preferHuffmanEncoding: If true, huffman encoding will be used only if it will save space. If false, huffman encoding will not be used.
     /// - prefix: The number of bits in the first byte leave before starting the string
     /// - prefixBits: The bits to use in the first byte before the string begins.
+    @available(anyAppleOS 26.0, *)
     @discardableResult
     mutating func writeQPACKEncodedString(
         _ string: String,
@@ -116,7 +117,7 @@ extension ByteBuffer {
                 prefix: prefix - 1,
                 prefixBits: huffmanMask | prefixBits
             )
-            self.writeHuffmanEncoded(bytes: utf8)
+            self.writeHuffmanEncoded(bytes: utf8, encodedByteLength: encodedByteLength)
         case .raw:
             // One bit is used for the Huffman flag (0)
             // So the prefix is reduced by one

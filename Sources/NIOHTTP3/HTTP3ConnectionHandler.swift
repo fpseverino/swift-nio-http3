@@ -175,8 +175,8 @@ public final class HTTP3ConnectionHandler<StreamCreator: QUICStreamCreator & Sen
     ///   - logger: A logger.
     ///   - connection: An instance of ``HTTP3ServerConnection`` which inbound connections can be vended to.
     /// - Returns: A ``HTTP3ConnectionHandler``.
-    @_spi(HTTP3AsyncInterface)
     @available(anyAppleOS 26, *)
+    @_spi(HTTP3AsyncInterface)
     public static func server<Output: Sendable>(
         eventLoop: any EventLoop,
         configuration: HTTP3ServerConfiguration,
@@ -329,7 +329,7 @@ public final class HTTP3ConnectionHandler<StreamCreator: QUICStreamCreator & Sen
         // shut the child channels before shutting the connection.
         // If this is triggered, most likely theres a mistake in the way the connection state machine remembers which streams are open,
         // or in the way the channels notify the state machine when they open/close.
-        self.coordinator.assertNoOpenStreams()
+        self.coordinator.assertNoOpenStreamsAndDropQPACKCoder()
         context.fireChannelInactive()
     }
 
