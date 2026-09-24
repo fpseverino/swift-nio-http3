@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(PackageInternal) import HTTP3
+@_spi(PackageInternal) public import HTTP3
 import HTTPTypes
 import Logging
 import NIOCore
@@ -866,11 +866,11 @@ extension HTTP3ConnectionCoordinator: HTTP3StreamDelegate {
 
 @available(anyAppleOS 26, *)
 extension HTTP3ConnectionCoordinator: QPACKConnectionDelegate {
-    func makeOutboundEncoderStream() {
+    public func makeOutboundEncoderStream() {
         self.createQPACKEncoderInstructionStream()
     }
 
-    func connectionError(_ error: HTTP3Error) {
+    public func connectionError(_ error: HTTP3Error) {
         self.emitConnectionErrorFromStream(error)
     }
 }
