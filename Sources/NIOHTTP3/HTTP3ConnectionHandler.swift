@@ -268,7 +268,7 @@ public final class HTTP3ConnectionHandler<StreamCreator: QUICStreamCreator & Sen
     ///   - inboundPushStreamInitializer: A closure which will be called for every incoming push stream.
     ///   - internalInboundStreamInitializer: A closure which will be called for every incoming non-push stream.
     /// - Returns: A ``HTTP3ConnectionHandler``.
-    static func client(
+    public static func client(
         eventLoop: any EventLoop,
         configuration: HTTP3ClientConfiguration,
         settings: HTTP3Settings,

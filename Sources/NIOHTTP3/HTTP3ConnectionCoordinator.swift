@@ -411,7 +411,7 @@ public final class HTTP3ConnectionCoordinator<QUICStreamCreator: NIOQUICHelpers.
                 case .push:
                     try self.handleInboundPushStream(streamChannel, streamID: streamID)
                 case .unknown:
-                    try self.handleInboundUnknownStream(streamChannel, streamID: streamID, streamType: streamType)
+                    try? self.handleInboundUnknownStream(streamChannel, streamID: streamID, streamType: streamType)
                 case .control:
                     try self.handleInboundControlStream(streamChannel, streamID: streamID)
                 case .qpackEncoder:
