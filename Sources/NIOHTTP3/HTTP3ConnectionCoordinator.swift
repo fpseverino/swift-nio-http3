@@ -16,12 +16,12 @@
 import HTTPTypes
 import Logging
 import NIOCore
-import NIOQUICHelpers
+public import NIOQUICHelpers
 
 /// This class owns the connection state machine and is responsible for opening streams and sending frames.
 /// I.e. it coordinates everything across the connection, including qpack.
 @available(anyAppleOS 26, *)
-final class HTTP3ConnectionCoordinator<QUICStreamCreator: NIOQUICHelpers.QUICStreamCreator> {
+public final class HTTP3ConnectionCoordinator<QUICStreamCreator: NIOQUICHelpers.QUICStreamCreator> {
 
     /// The QPACK coder used by all streams of this connection. The coordinator is both the QPACK
     /// connection delegate and the stream delegate of every stream handler.
@@ -32,7 +32,7 @@ final class HTTP3ConnectionCoordinator<QUICStreamCreator: NIOQUICHelpers.QUICStr
     private var qpackCoder: QPACKCoder?
     private var connectionStateMachine: HTTP3ConnectionStateMachine
     private let outboundControlStreamHandler: HTTP3OutboundControlStreamHandler
-    private let streamCreator: QUICStreamCreator
+    public let streamCreator: QUICStreamCreator
     /// The connection handler.
     ///
     /// Setting this creates a strong retain cycle which is broken by the connection handler when
@@ -405,7 +405,7 @@ final class HTTP3ConnectionCoordinator<QUICStreamCreator: NIOQUICHelpers.QUICStr
                 case .push:
                     try self.handleInboundPushStream(streamChannel, streamID: streamID)
                 case .unknown:
-                    try self.handleInboundUnknownStream(streamChannel, streamID: streamID, streamType: streamType)
+                    try? self.handleInboundUnknownStream(streamChannel, streamID: streamID, streamType: streamType)
                 case .control:
                     try self.handleInboundControlStream(streamChannel, streamID: streamID)
                 case .qpackEncoder:

@@ -43,7 +43,7 @@ public final class HTTP3ConnectionHandler<StreamCreator: QUICStreamCreator & Sen
     public typealias OutboundOut = ByteBuffer
 
     private let addTypeHandlers: Bool
-    private let coordinator: HTTP3ConnectionCoordinator<StreamCreator>
+    public let coordinator: HTTP3ConnectionCoordinator<StreamCreator>
     private let logger: Logger
     private let inboundStreamInitializer: H3InboundStreamInitializer
     private let internalInboundStreamInitializer:
@@ -268,7 +268,7 @@ public final class HTTP3ConnectionHandler<StreamCreator: QUICStreamCreator & Sen
     ///   - inboundPushStreamInitializer: A closure which will be called for every incoming push stream.
     ///   - internalInboundStreamInitializer: A closure which will be called for every incoming non-push stream.
     /// - Returns: A ``HTTP3ConnectionHandler``.
-    static func client(
+    public static func client(
         eventLoop: any EventLoop,
         configuration: HTTP3ClientConfiguration,
         settings: HTTP3Settings,

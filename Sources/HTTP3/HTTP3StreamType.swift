@@ -12,13 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(PackageInternal)
 public enum HTTP3StreamType: Sendable {
     case unidirectional(Unidirectional)
     case request  // Bidirectional streams must be request streams
 
     /// Unidirectional stream types.
-    @_spi(PackageInternal)
     public enum Unidirectional: Hashable, RawRepresentable, CustomStringConvertible, Sendable {
         /// Type 0x00. Carries HTTP3 frames such as settings, goaway, etc.
         case control
@@ -32,7 +30,6 @@ public enum HTTP3StreamType: Sendable {
         case unknown(raw: UInt64)
 
         /// RFC 9114 § 6.2 specifies the mapping.
-        @_spi(PackageInternal)
         public var rawValue: UInt64 {
             switch self {
             case .control: return 0
@@ -43,7 +40,6 @@ public enum HTTP3StreamType: Sendable {
             }
         }
 
-        @_spi(PackageInternal)
         public var description: String {
             switch self {
             case .control: return "control"
@@ -54,7 +50,6 @@ public enum HTTP3StreamType: Sendable {
             }
         }
 
-        @_spi(PackageInternal)
         public init(rawValue: UInt64) {
             precondition(rawValue <= QUICEncodableInteger.maxValue, "Invalid stream type \(rawValue)")
             switch rawValue {
