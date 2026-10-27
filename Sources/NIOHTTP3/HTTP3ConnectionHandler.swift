@@ -183,7 +183,10 @@ public final class HTTP3ConnectionHandler<StreamCreator: QUICStreamCreator & Sen
         settings: HTTP3Settings,
         streamCreator: StreamCreator,
         logger: Logger,
-        connection: HTTP3ServerConnection<Output, StreamCreator>
+        connection: HTTP3ServerConnection<Output, StreamCreator>,
+        internalInboundStreamInitializer: (
+            (any Channel, QUICStreamID, HTTP3StreamType.Unidirectional) -> EventLoopFuture<Void>
+        )? = nil
     ) -> Self {
         self.server(
             eventLoop: eventLoop,
@@ -192,7 +195,7 @@ public final class HTTP3ConnectionHandler<StreamCreator: QUICStreamCreator & Sen
             streamCreator: streamCreator,
             logger: logger,
             inboundRequestStreamInitializer: .multiplexer(connection),
-            internalInboundStreamInitializer: nil
+            internalInboundStreamInitializer: internalInboundStreamInitializer
         )
     }
 
